@@ -1,11 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 import UserList from './components/UserList.js';
+import ProjectList from './components/ProjectList.js';
+import TodoList from './components/TodoList.js'
 import MenuList from './components/Menu.js';
 import Footer from './components/Footer.js';
-import ProjectList from './components/ProjectList.js';
-import TodoList from './components/TodoList.js';
-import {HashRouter, BrowserRouter, Route, Routes, Link, Navigate} from 'react-router-dom';
+import {HashRouter, BrowserRouter, Route, Link, Navigate} from 'react-router-dom';
 
 
 class App extends React.Component {
@@ -14,19 +14,15 @@ class App extends React.Component {
             'name': 'Главная',
             'url': '/'
         },
-        {
-            'name': 'Контакты',
-            'url': '/contact'
-        },
     ]
     constructor(props) {
         super(props)
+
         this.state = {
             'menu': this.menu,
             'users': [],
             'projects': [],
             'todos': []
-
         }
     }
 
@@ -70,6 +66,7 @@ class App extends React.Component {
         return (
             <div>
                 <BrowserRouter>
+                    <div className="App">
                     <MenuList list_menu={this.state.menu} />
                         <nav>
                             <ul>
@@ -84,15 +81,10 @@ class App extends React.Component {
                                 </li>
                             </ul>
                         </nav>
-                        <div className="content">
-                            <Routes>
-                                <Route exact path='/' element={<UserList users={this.state.users} />} />
-                                <Route exact path='/projects' element={<ProjectList projects={this.state.projects} />} />
-                                <Route exact path='/todos' element={<TodoList todos={this.state.todos} />} />
-                            </Routes>
-                        </div>
-                    <div className="App">
-                        <Footer/>
+                        <Route exact path='/' component={() => <UserList users={this.state.users} />} />
+                        <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />} />
+                        <Route exact path='/todos' component={() => <TodoList todos={this.state.todos} />} />
+                    <Footer/>
                     </div>
                 </BrowserRouter>
             </div>
