@@ -1,5 +1,7 @@
 from rest_framework import mixins
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import AllowAny
+
 from TODO.models import Project, Todo
 from TODO.serializers import ProjectSerializer, TodoSerializer
 from rest_framework.viewsets import GenericViewSet
@@ -19,6 +21,7 @@ class ProjectViews(
     mixins.DestroyModelMixin,
     GenericViewSet,
 ):
+    permission_classes = [AllowAny]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     pagination_class = ProjectLimitOffsetPagination
@@ -39,6 +42,7 @@ class TodoViews(
     mixins.DestroyModelMixin,
     GenericViewSet,
 ):
+    permission_classes = [AllowAny]
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
     pagination_class = TodoLimitOffsetPagination
