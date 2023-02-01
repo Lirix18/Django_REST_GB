@@ -1,5 +1,6 @@
 from rest_framework import viewsets, mixins
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import AllowAny, DjangoModelPermissions
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -17,3 +18,4 @@ class MyUserViewSet(
 ):
     queryset = MyUser.objects.all()
     serializer_class = MyUserModelSerializer
+    permission_classes = [AllowAny]
