@@ -5,7 +5,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from .models import MyUser
-from .serializers import MyUserModelSerializer
+from .serializers import MyUserModelSerializer, MyUserModelSerializerV2
 
 
 # просмотра списка и каждого пользователя в отдельности (id пользователей 6, 7 и 8)
@@ -19,3 +19,8 @@ class MyUserViewSet(
     queryset = MyUser.objects.all()
     serializer_class = MyUserModelSerializer
     permission_classes = [AllowAny]
+
+    def get_serializer_class(self):
+        if self.request.version == '2.0':
+            return MyUserModelSerializerV2
+        return MyUserModelSerializerV2
