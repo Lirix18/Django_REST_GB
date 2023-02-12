@@ -14,20 +14,36 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 from users.views import MyUserViewSet
 from TODO.views import ProjectViews, TodoViews
+from drf_yasg.views import get_schema_view
+from drf_yasg.openapi import Info, License, Contact
 
-router = DefaultRouter()
-router.register('users', MyUserViewSet)
-router.register('projects', ProjectViews)
-router.register('todos', TodoViews)
+schema_view = get_schema_view(
+    Info(
+        title='TODO',
+        default_version='1.0',
+        description='description',
+        license=License(name='MIT'),
+        contact=Contact(email='test@test.ru')
+    )
+)
+
+# router = DefaultRouter()
+# router.register('users', MyUserViewSet)
+# router.register('projects', ProjectViews)
+# router.register('todos', TodoViews)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('api/', include(router.urls)),
+    path('api/', include('users.urls')),
+    path('api/2.0/', include('users.urls', namespace='2.0')),
     path('api-token-auth/', views.obtain_auth_token),
+    path('api/2.0/', include('users.urls', namespace='2.0')),
+    path('swagger', schema_view.with_ui()),
+    re_path(r'swagger(?P<format>\.json|\.yaml)', schema_view.without_ui()),
 ]
