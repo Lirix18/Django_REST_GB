@@ -8,7 +8,7 @@ import Footer from './components/Footer.js';
 import LoginForms from './components/LoginForms';
 import TodoForms from './components/TodoForms';
 import ProjectForms from './components/ProjectForms';
-import {HashRouter, BrowserRouter, Route, Routes, Link, Navigate, useLocation} from 'react-router-dom';
+import {BrowserRouter, Route, Link, useLocation} from 'react-router-dom';
 
 
 const NotFound = () => {
@@ -45,10 +45,10 @@ class App extends React.Component {
         let headers = this.getHeaders()
 
         axios
-            .delete('http://127.0.0.1:8000/api/todos/${todoId}', {headers})
+            .delete(`http://127.0.0.1:8000/api/todos/${todoId}`, {headers})
             .then(response => {
                 this.setState({
-                    'todos': this.state.todos.filter((todo) => todo.id != todoId)
+                    'todos': this.state.todos.filter((todo) => todo.id !== todoId)
                 })
             })
             .catch(error => {
@@ -88,7 +88,7 @@ class App extends React.Component {
     }
 
     isAuth(){
-        return this.state.token != ''
+        return this.state.token !== ''
     }
 
     componentDidMount() {
@@ -195,7 +195,6 @@ class App extends React.Component {
                         </nav>
                         <Route exact path='/' component={() => <UserList users={this.state.users} />} />
                         <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />} />
-                        //<Route exact path='/todos' component={() => <TodoList todos={this.state.todos} />} />
                         <Route exact path='/create_todo' component={() => <TodoForms users={this.state.users} createContent={(title, users) => this.createContent=(title, users)}/>} />
                         <Route exact path='/create_project' component={() => <ProjectForms users={this.state.users} createContent={(title, users) => this.createContent(title, users)} />} />
                         <Route exact path='/todos' component={() => <TodoList todos={this.state.todos} users={this.state.users} deleteTodo={(todoId) => this.deleteTodo(todoId)} />} />
