@@ -6,7 +6,7 @@ services:
     privileged: true
     restart: always
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_USER: dante
       POSTGRES_PASSWORD: dante123456
@@ -14,13 +14,19 @@ services:
   backend:
     build:
       context: .
-    ports:
-      - 8080:8080
+    expose:
+      - 8080
     command: bash -c "
       ./wait-for-postgres.sh db
       && python manage.py migrate
       && python manage.py loaddata first_data.json
-      && python manage.py runserver 0.0.0.0:8080 
+      && gunicorn backend.wsgi -b 0.0.0.0:8080 
       "
     depends_on:
       - db
+  nginx:
+    build: ./nginx
+    ports:
+      - "8000:80"
+    depends_on:
+      - backend
